@@ -1,0 +1,43 @@
+name: CodeDebug
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    strategy:
+       fail-fast: false
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+    - name: Install DKMS and missing modules
+      run: |
+        sudo apt install dkms -y
+        git clone https://github.com/ikuaki1009/anbox-modules
+        cd andbox-modules && ./INSTALL.sh
+    - name: Install wayland
+      run: |
+        sudo apt install xwayland mutter -y
+        mutter --wayland --headless &
+    - name: Install waydroid
+      run: |
+        sudo apt install curl ca-certificates -y
+        curl https://repo.waydro.id | sudo bash
+        sudo apt install waydroid -y
+        sudo waydroid init
+    - name: Solve network issues for waydroid
+      run: |
+        # https://unix.stackexchange.com/a/743946
+        sudo sed -i~ -E 's/=.\$\(command -v (nft|ip6?tables-legacy).*/=/g' \
+          /usr/lib/waydroid/data/scripts/waydroid-net.sh
+    - name: Start waydroid
+      run: |
+        waydroid session start &
+        sleep 10
+        waydroid show-full-ui
+        sleep 10
+        sudo waydroid shell curl -v https://www.google.com
+    - name: Install vscode-server
+      run: wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
+    - name: Start
+      run: python -u main.py
