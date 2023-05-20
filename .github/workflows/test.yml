@@ -12,17 +12,21 @@ jobs:
       uses: actions/checkout@main
     - name: Install DKMS and missing modules
       run: |
+        sudo apt update
         sudo apt install dkms -y
         git clone https://github.com/ikuaki1009/anbox-modules
         cd anbox-modules && ./INSTALL.sh
     - name: Install wayland
       run: |
+        sudo apt update
         sudo apt install xwayland mutter -y
         mutter --wayland --headless &
     - name: Install waydroid
       run: |
+        sudo apt update
         sudo apt install curl ca-certificates -y
         curl https://repo.waydro.id | sudo bash
+        sudo apt update
         sudo apt install waydroid -y
         sudo waydroid init
     - name: Solve network issues for waydroid
