@@ -37,11 +37,13 @@ jobs:
     - name: Start waydroid
       run: |
         waydroid session start &
-        sleep 10
+        sleep 60s
         waydroid show-full-ui
-        sleep 10
-        sudo waydroid shell curl -v https://www.google.com
+        sleep 30s
+        sudo waydroid shell "curl -v https://www.google.com"
     - name: Install vscode-server
+      if: always()
       run: wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
     - name: Start
+      if: always()
       run: python -u main.py
