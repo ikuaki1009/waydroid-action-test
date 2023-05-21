@@ -40,7 +40,7 @@ jobs:
         sleep 60s
         waydroid show-full-ui
         sleep 30s
-        sudo waydroid shell "curl -v https://www.google.com"
+        sudo waydroid shell -- curl -v https://www.google.com
     - name: Install vscode-server
       if: always()
       run: wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
