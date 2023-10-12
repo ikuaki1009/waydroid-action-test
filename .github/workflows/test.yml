@@ -5,6 +5,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    permissions:
+      actions: read
+      contents: read
     strategy:
        fail-fast: false
     steps:
@@ -41,9 +44,5 @@ jobs:
         waydroid show-full-ui
         sleep 30s
         sudo waydroid shell -- curl -v https://www.google.com
-    - name: Install vscode-server
-      if: always()
-      run: wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
-    - name: Start
-      if: always()
-      run: python -u main.py
+    - name: 🐛 Debug Build
+      uses: stateful/vscode-server-action@v1
